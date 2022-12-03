@@ -10,7 +10,7 @@ namespace To_Do.Data
         void SaveChanges();
         IEnumerable<ToDoTask> GetTodos();
         IEnumerable<ToDoTask> GetTodosByUserId(int id);
-        void DeleteTodo(ToDoTask todo);
+        void DeleteTodo(int id);
     }
     public class ApplicationRepository : IApplicationRepository
     {
@@ -19,20 +19,23 @@ namespace To_Do.Data
         {
 
         }
+        public ApplicationRepository(ApplicationDbContext dbContext)
+        {
+            _context= dbContext;
+        }
         public void AddNewToDo(ToDoTask todo)
         {
             _context.TodoTasks.Add(todo);
-            throw new System.NotImplementedException();
         }
 
         public void SaveChanges()
         {
             _context.SaveChanges();
         }
-        public void DeleteTodo(ToDoTask todo)
+        public void DeleteTodo(int id)
         {
-            _context.TodoTasks.Remove(todo);
-            throw new System.NotImplementedException();
+            ToDoTask todoToRemove= _context.TodoTasks.FirstOrDefault(td => td.Id==id);
+            _context.TodoTasks.Remove(todoToRemove);
         }
 
         public IEnumerable<ToDoTask> GetTodos()

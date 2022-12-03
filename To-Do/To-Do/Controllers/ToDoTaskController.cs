@@ -11,10 +11,11 @@ namespace To_Do.Controllers
     public class ToDoTaskController : Controller
     {
         private ApplicationRepository _repo;
-        public ToDoTaskController(ApplicationRepository repo)
+        public ToDoTaskController(ApplicationDbContext dbContext)
         {
-            _repo = repo;
+            _repo = new ApplicationRepository(dbContext);
         }
+
         //GET /<controller>/
         public IActionResult Index()
         {

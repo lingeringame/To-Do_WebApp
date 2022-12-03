@@ -3,6 +3,8 @@
 
 
 <h1>@ViewBag.title</h1>
+
+
 @if (Model.Count <= 0)
 {
     <span>Nothing here yet!</span>
@@ -11,16 +13,20 @@ else
 {
     <table class="table">
         <tr>
+            <th></th>
             <th>Title</th>
             <th>Body</th>
         </tr>
         @foreach (ToDoTask todo in Model)
         {
             <tr>
-                <td>@todo.Title</td>
-                <td>@todo.Body</td>
+                <td><input type="checkbox" data-row="row @todo.Id"/>✓</td>
+                <td class="todoText" data-row="row @todo.Id">@todo.Title</td>
+                <td class="todoText" data-row="row @todo.Id">@todo.Body</td>
+                <td><a asp-controller="Delete" asp-action="DeleteTask" asp-route-id="@todo.Id">Delete</a></td>
             </tr>
         }
     </table>
 }
+<script src="~/js/strikethroughTask.js"></script>
 
