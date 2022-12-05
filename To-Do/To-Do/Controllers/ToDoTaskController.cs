@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using To_Do.Data;
@@ -39,7 +40,8 @@ namespace To_Do.Controllers
                 ToDoTask newTask = new ToDoTask
                 {
                     Title = viewModel.Title,
-                    Body = viewModel.Body
+                    Body = viewModel.Body,
+                    isImportant = viewModel.isImportant
                 };
                 _repo.AddNewToDo(newTask);
                 _repo.SaveChanges();
@@ -47,10 +49,53 @@ namespace To_Do.Controllers
             }
             return Redirect("/todotask/add");
         }
+        //GET /<controller>/EditTask
+        public IActionResult EditTask(int id)
+        {
+            ViewBag.taskToEdit = _repo.GetTodoById(id); 
+            AddToDoTaskViewModel viewModel = new AddToDoTaskViewModel();
+            return View(viewModel);
+        }
 
+        //POST /<controller>/EditTask
+        [HttpPost]
+        public IActionResult EditTask(AddToDoTaskViewModel viewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                ToDoTask editedTask = new ToDoTask
+                {
+                    Id = viewModel.Id,
+                    Title = viewModel.Title,
+                    Body = viewModel.Body
+                };
+                _repo.UpdateTask(editedTask);
+                _repo.SaveChanges();
+                return Redirect("/todotask");
+            }
+            return Redirect("/todotask/edit/" + viewModel.Id);
+        }
         public IActionResult DeleteTask(int id)
         {
             _repo.DeleteTodo(id);
+            _repo.SaveChanges();
+            return Redirect("/todotask");
+        }
+        //GET /<controller>/BulkDelete
+        public IActionResult BulkDelete()
+        {
+            List<ToDoTask> tasks = _repo.GetTodos().ToList();
+            return View(tasks);
+        }
+
+        //POST /<controller>/BulkDelete
+        [HttpPost]
+        public IActionResult BulkDelete(int[] ids) //ids is empty. Need to debug this. checked checkboxes won't append their value to the array. 
+        {
+            foreach(int id in ids)
+            {
+                _repo.DeleteTodo(id);
+            }
             _repo.SaveChanges();
             return Redirect("/todotask");
         }

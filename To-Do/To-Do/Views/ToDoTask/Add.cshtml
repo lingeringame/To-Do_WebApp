@@ -12,6 +12,9 @@
         <label asp-for="Body">Body: <textarea asp-for="Body" rows="10" cols="50" maxlength="1000"></textarea></label>
         <span asp-validation-for="Body" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="isImportant">Mark as Important?: <input type="checkbox" asp-for="isImportant"/></label>
+    </div>
     <input type="submit" value="Add To-Do" />
 </form>
 

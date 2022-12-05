@@ -9,6 +9,8 @@ namespace To_Do.Data
         void AddNewToDo(ToDoTask todo);
         void SaveChanges();
         IEnumerable<ToDoTask> GetTodos();
+        ToDoTask GetTodoById(int id);
+        void UpdateTask(ToDoTask todo);
         IEnumerable<ToDoTask> GetTodosByUserId(int id);
         void DeleteTodo(int id);
     }
@@ -17,7 +19,6 @@ namespace To_Do.Data
         private readonly ApplicationDbContext _context;
         public ApplicationRepository()
         {
-
         }
         public ApplicationRepository(ApplicationDbContext dbContext)
         {
@@ -37,6 +38,10 @@ namespace To_Do.Data
             ToDoTask todoToRemove= _context.TodoTasks.FirstOrDefault(td => td.Id==id);
             _context.TodoTasks.Remove(todoToRemove);
         }
+        public ToDoTask GetTodoById(int id)
+        {
+            return _context.TodoTasks.Find(id);
+        }
 
         public IEnumerable<ToDoTask> GetTodos()
         {
@@ -46,6 +51,11 @@ namespace To_Do.Data
         public IEnumerable<ToDoTask> GetTodosByUserId(int id)
         {
             throw new System.NotImplementedException();
+        }
+
+        public void UpdateTask(ToDoTask todo)
+        {
+            _context.TodoTasks.Update(todo);
         }
     }
 }

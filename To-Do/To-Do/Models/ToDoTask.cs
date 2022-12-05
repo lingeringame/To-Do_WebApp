@@ -8,6 +8,7 @@ namespace To_Do.Models
         public string Title { get; set; }
         public string Body { get; set; }
         //public bool IsCompleted { get; set; }
+        public bool isImportant { get; set; }
         public ToDoTask()
         {
 
