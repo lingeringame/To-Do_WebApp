@@ -11,7 +11,7 @@
 }
 else
 {
-    <table class="table">
+    <table>
         <tr>
             <th></th>
             <th>Title</th>
@@ -23,7 +23,7 @@ else
                 <td><input type="checkbox" data-row="row @todo.Id"/>✓</td>
                 <td class="todoText" data-row="row @todo.Id">@todo.Title</td>
                 <td class="todoText" data-row="row @todo.Id">@todo.Body</td>
-                <td><a asp-controller="Delete" asp-action="DeleteTask" asp-route-id="@todo.Id">Delete</a></td>
+                <td><a asp-controller="ToDoTask" asp-action="DeleteTask" asp-route-id="@todo.Id">Delete</a></td>
             </tr>
         }
     </table>

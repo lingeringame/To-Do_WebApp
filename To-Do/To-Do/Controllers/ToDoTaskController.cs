@@ -47,5 +47,12 @@ namespace To_Do.Controllers
             }
             return Redirect("/todotask/add");
         }
+
+        public IActionResult DeleteTask(int id)
+        {
+            _repo.DeleteTodo(id);
+            _repo.SaveChanges();
+            return Redirect("/todotask");
+        }
     }
 }
