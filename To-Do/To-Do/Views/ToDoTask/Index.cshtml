@@ -4,29 +4,49 @@
 
 <h1>@ViewBag.title</h1>
 
+<head>
+    <style>
+        table {
+            width: 100%;
+        }
+        th {
+            border-bottom: 1px solid;
+        }
 
+    </style>
+</head>
 @if (Model.Count <= 0)
 {
     <span>Nothing here yet!</span>
 }
 else
 {
-    <table>
-        <tr>
-            <th></th>
-            <th>Title</th>
-            <th>Body</th>
-        </tr>
+    <a asp-controller="ToDoTask" asp-action="BulkDelete">Select To Delete</a>
+    <table style="width:50%;" class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>✓</th>
+                <th></th>
+                <th>Title</th>
+                <th>Body</th>
+                @*<th>Marked as Important</th>*@
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
         @foreach (ToDoTask todo in Model)
         {
             <tr>
-                <td><input type="checkbox" data-row="row @todo.Id"/>✓</td>
+                <td><input type="checkbox" data-row="row @todo.Id"/></td>
+                <td class="todoText" data-row="row @todo.Id">@(@todo.isImportant == true ? "❗" : "")</td>
                 <td class="todoText" data-row="row @todo.Id">@todo.Title</td>
                 <td class="todoText" data-row="row @todo.Id">@todo.Body</td>
+                <td><a asp-controller="ToDoTask" asp-action="EditTask" asp-route-id="@todo.Id">Edit</a></td>
                 <td><a asp-controller="ToDoTask" asp-action="DeleteTask" asp-route-id="@todo.Id">Delete</a></td>
             </tr>
         }
     </table>
+
 }
 <script src="~/js/strikethroughTask.js"></script>
 

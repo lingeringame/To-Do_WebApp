@@ -1,0 +1,16 @@
+﻿@using To_Do.Models;
+@model List<ToDoTask>
+
+<form method="post" asp-controller="ToDoTask" asp-action="BulkDelete" asp-route-ids="idsToRemove">
+        @foreach(var task in Model)
+        {
+            <div class="form-group">
+                <label>
+                    <input style="transform: scale(1.5);" type="checkbox" name="idsToRemove" value="@task.Id"/>
+                    <span>@task.Title</span>
+                    <span>@task.Body</span>
+                </label>
+            </div>
+        }
+    <input type="submit" value="Delete Selected" class="btn btn-danger"/>
+</form>
