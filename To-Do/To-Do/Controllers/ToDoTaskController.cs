@@ -22,6 +22,8 @@ namespace To_Do.Controllers
         {
             ViewBag.title = "Your tasks";
             List<ToDoTask> todos = _repo.GetTodos().ToList();
+            IComparer<ToDoTask> comparer = new ToDoTaskComparer();
+            todos.Sort(comparer);
             return View(todos);
         }
 
@@ -90,9 +92,9 @@ namespace To_Do.Controllers
 
         //POST /<controller>/BulkDelete
         [HttpPost]
-        public IActionResult BulkDelete(int[] ids) //ids is empty. Need to debug this. checked checkboxes won't append their value to the array. 
+        public IActionResult BulkDelete(int[] idsToRemove) //ids is empty. Need to debug this. checked checkboxes won't append their value to the array. 
         {
-            foreach(int id in ids)
+            foreach(int id in idsToRemove)
             {
                 _repo.DeleteTodo(id);
             }

@@ -15,7 +15,7 @@
         <span asp-validation-for="Body" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="isImportant">Mark as Important?: <input type="checkbox" asp-for="isImportant" /></label>
+        <label asp-for="isImportant">Mark as Important?: <input type="checkbox" asp-for="isImportant" checked="@ViewBag.taskToEdit.isImportant"/></label>
     </div>
     <input type="submit" value="Save" />
 </form>

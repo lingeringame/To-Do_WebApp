@@ -9,7 +9,7 @@ checkboxArr.forEach(checkbox => checkbox.addEventListener("change", function () 
         for (item of textToStrikethrough) {
             item.style.textDecoration = "line-through";
             item.style.color = "gray";
-            item.style.backgroundColor = "rgb(250,250,250)";
+            item.style.backgroundColor = "rgb(200,200,200)";
         }
     } else {
         for (item of textToStrikethrough) {
