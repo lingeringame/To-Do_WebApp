@@ -7,15 +7,11 @@ checkboxArr.forEach(checkbox => checkbox.addEventListener("change", function () 
     let textToStrikethrough = findMatchingInputs(checkbox, todoTextArr);
     if (checkbox.checked) {
         for (item of textToStrikethrough) {
-            item.style.textDecoration = "line-through";
-            item.style.color = "gray";
-            item.style.backgroundColor = "rgb(200,200,200)";
+            item.classList.add("strikethrough")
         }
     } else {
         for (item of textToStrikethrough) {
-            item.style.textDecoration = "none";
-            item.style.color = "black";
-            item.style.backgroundColor = "white";
+            item.classList.remove("strikethrough")
         }
     }
 }))

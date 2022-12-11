@@ -20,7 +20,7 @@ namespace To_Do.Controllers
         //GET /<controller>/
         public IActionResult Index()
         {
-            ViewBag.title = "Your tasks";
+            ViewBag.title = "Your todo's";
             List<ToDoTask> todos = _repo.GetTodos().ToList();
             IComparer<ToDoTask> comparer = new ToDoTaskComparer();
             todos.Sort(comparer);
@@ -55,7 +55,9 @@ namespace To_Do.Controllers
         public IActionResult EditTask(int id)
         {
             ViewBag.taskToEdit = _repo.GetTodoById(id); 
-            AddToDoTaskViewModel viewModel = new AddToDoTaskViewModel();
+            //I pass in ViewBag.taskToEdit.Body because the body text is stored in a textarea and due to ASP.NET rules, I have to instantiate the viewModel with the
+            //Body description so that it properly shows, instead of just putting a temporary placeholder attribute. 
+            AddToDoTaskViewModel viewModel = new AddToDoTaskViewModel(ViewBag.taskToEdit.Body);
             return View(viewModel);
         }
 
@@ -69,7 +71,8 @@ namespace To_Do.Controllers
                 {
                     Id = viewModel.Id,
                     Title = viewModel.Title,
-                    Body = viewModel.Body
+                    Body = viewModel.Body,
+                    isImportant= viewModel.isImportant
                 };
                 _repo.UpdateTask(editedTask);
                 _repo.SaveChanges();

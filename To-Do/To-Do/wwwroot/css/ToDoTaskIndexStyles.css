@@ -1,0 +1,77 @@
+﻿table {
+    width: 100%;
+}
+
+th {
+    border-bottom: 1px solid;
+}
+
+.taskDesc {
+    background-color: rgb(240,240,240);
+    border-radius: 1em;
+    padding: 10px;
+}
+
+.taskDescBody {
+    margin-top: 3%;
+}
+.taskDescTitle {
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: #948dfd;
+    border-bottom: 1px lightgray solid;
+}
+
+.taskDescTitleImportant {
+    padding-left: 2%;
+    display: inline;
+    color: #ee6e57;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.indexPageTitle {
+    color: #de6aa5 !important;
+    font-weight: 600 !important;
+}
+
+.theTasks {
+    background-color: #e8eaf6;
+}
+
+.taskTitle {
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.taskOrigin {
+    color: gray;
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.taskTitle, .taskOrigin {
+    padding: .1rem;
+    margin: .05rem;
+}
+
+.markedImportantSign {
+    display: inline;
+    color: #ee6e57;
+    font-weight: 900;
+    font-size: 1.4rem;
+}
+
+.strikethrough {
+    background-color: #d1d2de;
+    text-decoration: line-through;
+    color: gray;
+}
+
+.taskTitle:hover {
+    color: #948dfd;
+}
+
+.todoTitleClicked {
+    color: #948dfd;
+}
