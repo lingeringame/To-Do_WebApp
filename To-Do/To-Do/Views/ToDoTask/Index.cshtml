@@ -3,7 +3,13 @@
 
 
 <h1 class="indexPageTitle">@ViewBag.title</h1>
+<div>
+    <form method="post" asp-controller="ToDoTask" asp-action="Search">
+        <input style="border-radius: 10px;" type="text" id="userInput" name="userInput" placeholder="Search for..." />
+        <input type="submit" value="Search">
+    </form>
 
+</div>
 <head>
     <link href="~/css/ToDoTaskIndexStyles.css" rel="stylesheet" />
 </head>
@@ -20,11 +26,11 @@ else
                 @foreach (ToDoTask todo in Model)
                 {
                     <tr class="theTasks" data-row="row @todo.Id">
-                        <td><input type="checkbox" data-row="row @todo.Id" /></td>
-                        <td class="todoText" data-row="row @todo.Id"><p class="markedImportantSign">@(@todo.isImportant == true ? "!" : "")</p></td>
-                        <td class="todoText" data-row="row @todo.Id">
+                        <td><input type="checkbox" data-row="row @todo.Id" asp-for="@todo.IsCompleted" checked="@todo.IsCompleted"/></td>
+                        <td class="todoText @(@todo.IsCompleted ? "strikethrough" : "")" data-row="row @todo.Id"><p class="markedImportantSign">@(@todo.IsImportant == true ? "!" : "")</p></td>
+                        <td class="todoText @(@todo.IsCompleted ? "strikethrough" : "")" data-row="row @todo.Id">
                             <p class="taskTitle">@todo.Title</p>
-                            <p class="taskOrigin">December 04, 2022 06:43:51 PM</p>
+                            <p class="taskOrigin">@todo.CreatedOn</p>
                             </td>
                         <td><a asp-controller="ToDoTask" asp-action="EditTask" asp-route-id="@todo.Id">Edit</a></td>
                         <td><a asp-controller="ToDoTask" asp-action="DeleteTask" asp-route-id="@todo.Id">Delete</a></td>
@@ -37,7 +43,7 @@ else
             @foreach(ToDoTask todo in Model)
             {
                 <div class="taskDesc" style="display:none;" data-row="row @todo.Id">
-                    <div class="taskDescTitle">@todo.Title <p class="taskDescTitleImportant">@(todo.isImportant ? "Important" : "")</p></div>
+                    <div class="taskDescTitle">@todo.Title <p class="taskDescTitleImportant">@(todo.IsImportant ? "Important" : "")</p></div>
                     <div class="taskDescBody">@todo.Body</div>
                 </div>
             }

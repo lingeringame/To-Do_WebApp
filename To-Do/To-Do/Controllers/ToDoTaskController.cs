@@ -18,13 +18,22 @@ namespace To_Do.Controllers
         }
 
         //GET /<controller>/
-        public IActionResult Index()
+        public IActionResult Index(List<ToDoTask> searchSet = null)
         {
             ViewBag.title = "Your todo's";
-            List<ToDoTask> todos = _repo.GetTodos().ToList();
             IComparer<ToDoTask> comparer = new ToDoTaskComparer();
-            todos.Sort(comparer);
-            return View(todos);
+            if(!searchSet.Any())
+            {
+                List<ToDoTask> todos = _repo.GetTodos().ToList();
+                todos.Sort(comparer);
+                return View(todos);
+            }
+            else
+            {
+                ViewBag.userInput = "default";
+                searchSet.Sort(comparer);
+                return View(searchSet);
+            }
         }
 
         //GET /<controller>/Add
@@ -43,7 +52,7 @@ namespace To_Do.Controllers
                 {
                     Title = viewModel.Title,
                     Body = viewModel.Body,
-                    isImportant = viewModel.isImportant
+                    IsImportant = viewModel.IsImportant
                 };
                 _repo.AddNewToDo(newTask);
                 _repo.SaveChanges();
@@ -72,7 +81,9 @@ namespace To_Do.Controllers
                     Id = viewModel.Id,
                     Title = viewModel.Title,
                     Body = viewModel.Body,
-                    isImportant= viewModel.isImportant
+                    IsImportant = viewModel.IsImportant,
+                    CreatedOn = _repo.GetTodoById(viewModel.Id).CreatedOn,
+                    IsCompleted= viewModel.IsCompleted
                 };
                 _repo.UpdateTask(editedTask);
                 _repo.SaveChanges();
@@ -103,6 +114,28 @@ namespace To_Do.Controllers
             }
             _repo.SaveChanges();
             return Redirect("/todotask");
+        }
+
+        //GET /<controller>/Search
+        [HttpPost]
+        public IActionResult Search(string userInput)
+        {
+            List<ToDoTask> todos = _repo.GetTodos().ToList();
+            List<ToDoTask> resultSet = new List<ToDoTask>();
+            if(string.IsNullOrEmpty(userInput) || userInput.ToLower() == "all")
+            {
+                resultSet = todos;
+            } else
+            {
+                foreach (ToDoTask todo in todos)
+                {
+                    if (todo.Title.Contains(userInput))
+                    {
+                        resultSet.Add(todo);
+                    }
+                }
+            }
+            return View("Index",resultSet);
         }
     }
 }

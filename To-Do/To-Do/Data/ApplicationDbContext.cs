@@ -14,5 +14,13 @@ namespace To_Do.Data
             : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<ToDoTask>()
+                .Property(t => t.CreatedOn)
+                .HasDefaultValueSql("NOW(6)");
+            base.OnModelCreating(builder);
+        }
     }
 }

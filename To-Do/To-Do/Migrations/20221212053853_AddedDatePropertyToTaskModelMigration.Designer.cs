@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using To_Do.Data;
 
 namespace To_Do.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221212053853_AddedDatePropertyToTaskModelMigration")]
+    partial class AddedDatePropertyToTaskModelMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,14 +229,11 @@ namespace To_Do.Migrations
                         .HasColumnType("datetime(6)")
                         .HasDefaultValueSql("NOW(6)");
 
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsImportant")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<string>("Title")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("isImportant")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 

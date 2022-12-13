@@ -9,7 +9,7 @@ namespace To_Do.Models
     {
         public int Compare(ToDoTask x, ToDoTask y)
         {
-            return y.isImportant.CompareTo(x.isImportant);
+            return y.IsImportant.CompareTo(x.IsImportant);
         }
     }
 }

@@ -4,7 +4,9 @@
 
 @model AddToDoTaskViewModel;
 
-<p style="display:none;">@Model.Id = @ViewBag.taskToEdit.Id;</p>
+<p style="display:none;">
+    @Model.Id = @ViewBag.taskToEdit.Id;
+</p>
 <form method="post" asp-controller="ToDoTask" asp-action="EditTask">
     <div class="form-group">
         <label asp-for="Title">Title: <input type="text" asp-for="Title" value="@ViewBag.taskToEdit.Title"/></label>
@@ -15,7 +17,10 @@
         <span asp-validation-for="Body" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="isImportant">Mark as Important?: <input type="checkbox" asp-for="isImportant" checked="@ViewBag.taskToEdit.isImportant"/></label>
+        <label asp-for="IsImportant">Mark as Important?: <input type="checkbox" asp-for="IsImportant" checked="@ViewBag.taskToEdit.IsImportant"/></label>
+    </div>
+    <div class="form-group">
+        <label asp-for="IsCompleted">Mark as Completed?: <input type="checkbox" asp-for="IsCompleted" checked="@ViewBag.taskToEdit.IsCompleted" /></label>
     </div>
     <input type="submit" value="Save" />
 </form>

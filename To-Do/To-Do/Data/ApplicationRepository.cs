@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using To_Do.Models;
 
@@ -40,7 +41,10 @@ namespace To_Do.Data
         }
         public ToDoTask GetTodoById(int id)
         {
-            return _context.TodoTasks.Find(id);
+            ToDoTask task = _context.TodoTasks
+                .AsNoTracking().FirstOrDefault(x => x.Id == id);
+            return task;
+            //return _context.TodoTasks.Find(id);
         }
 
         public IEnumerable<ToDoTask> GetTodos()
