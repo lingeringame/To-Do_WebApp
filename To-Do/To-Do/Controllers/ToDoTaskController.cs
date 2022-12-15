@@ -20,8 +20,9 @@ namespace To_Do.Controllers
         //GET /<controller>/
         public IActionResult Index(List<ToDoTask> searchSet = null)
         {
-            ViewBag.title = "Your todo's";
+            ViewBag.title = "Tasks";
             IComparer<ToDoTask> comparer = new ToDoTaskComparer();
+            //we can't set default value to _repo.Getodos, so if its null, we set the default value
             if(!searchSet.Any())
             {
                 List<ToDoTask> todos = _repo.GetTodos().ToList();
@@ -39,20 +40,23 @@ namespace To_Do.Controllers
         //GET /<controller>/Add
         public IActionResult Add()
         {
-            return View(new AddToDoTaskViewModel());
+            List<Folder> folders = _repo.GetFolders().ToList();
+            return View(new AddToDoTaskViewModel(folders));
         }
 
         //POST /<controller>/Add
         [HttpPost]
         public IActionResult Add(AddToDoTaskViewModel viewModel)
         {
+            Folder folder = _repo.GetFolderById(viewModel.FolderId);
             if(ModelState.IsValid)
             {
                 ToDoTask newTask = new ToDoTask
                 {
                     Title = viewModel.Title,
                     Body = viewModel.Body,
-                    IsImportant = viewModel.IsImportant
+                    IsImportant = viewModel.IsImportant,
+                    Folder= folder
                 };
                 _repo.AddNewToDo(newTask);
                 _repo.SaveChanges();
@@ -83,7 +87,8 @@ namespace To_Do.Controllers
                     Body = viewModel.Body,
                     IsImportant = viewModel.IsImportant,
                     CreatedOn = _repo.GetTodoById(viewModel.Id).CreatedOn,
-                    IsCompleted= viewModel.IsCompleted
+                    IsCompleted = viewModel.IsCompleted,
+                    Folder = _repo.GetFolderById(viewModel.FolderId)
                 };
                 _repo.UpdateTask(editedTask);
                 _repo.SaveChanges();

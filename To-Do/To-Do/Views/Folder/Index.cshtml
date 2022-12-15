@@ -1,0 +1,18 @@
+﻿@using To_Do.Models;
+@model List<Folder>;
+
+<div><a asp-controller="ToDoTask" asp-action="Index">(All >)</a></div>
+<h1>@ViewBag.title</h1>
+
+@if(Model.Count <= 0) {
+    <span>No folders</span>
+} else {
+    <table class="table">
+        @foreach (Folder f in Model)
+        {
+            <tr>
+                <td><a asp-controller="Folder" asp-action="Results" asp-route-id="@f.Id">@f.Name</a></td>
+            </tr>
+        }
+    </table>
+}

@@ -17,10 +17,16 @@
         <span asp-validation-for="Body" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="IsImportant">Mark as Important?: <input type="checkbox" asp-for="IsImportant" checked="@ViewBag.taskToEdit.IsImportant"/></label>
+        <label asp-for="IsImportant">Mark as important?: <input type="checkbox" asp-for="IsImportant" checked="@ViewBag.taskToEdit.IsImportant"/></label>
     </div>
     <div class="form-group">
-        <label asp-for="IsCompleted">Mark as Completed?: <input type="checkbox" asp-for="IsCompleted" checked="@ViewBag.taskToEdit.IsCompleted" /></label>
+        <label asp-for="IsCompleted">Mark as completed?: <input type="checkbox" asp-for="IsCompleted" checked="@ViewBag.taskToEdit.IsCompleted" /></label>
+    </div>
+    <div class="form-group">
+        <label asp-for="FolderId">Change folder</label>
+        <select asp-for="FolderId" asp-items="Model.AvailFolders">
+            <option disabled selected>--- SELECT ---</option>
+        </select>
     </div>
     <input type="submit" value="Save" />
 </form>

@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using To_Do.Models;
 
 namespace To_Do.ViewModels
 {
@@ -15,6 +18,8 @@ namespace To_Do.ViewModels
         public bool IsImportant { get; set; }
         public bool IsCompleted { get; set; }
         public DateTime CreatedOn { get; set; }
+        public List<SelectListItem> AvailFolders { get; set; }
+        public int FolderId { get; set; }
         public AddToDoTaskViewModel(string body)
         {
             Body = body;
@@ -22,6 +27,19 @@ namespace To_Do.ViewModels
         public AddToDoTaskViewModel()
         {
 
+        }
+        public AddToDoTaskViewModel(List<Folder> availFolders)
+        {
+            AvailFolders = new List<SelectListItem>();
+            foreach (Folder folder in availFolders)
+            {
+                SelectListItem item = new SelectListItem
+                {
+                    Value = folder.Id.ToString(),
+                    Text = folder.Name
+                };
+                AvailFolders.Add(item);
+            }
         }
     }
 }

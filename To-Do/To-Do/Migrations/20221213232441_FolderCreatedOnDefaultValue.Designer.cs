@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using To_Do.Data;
 
 namespace To_Do.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221213232441_FolderCreatedOnDefaultValue")]
+    partial class FolderCreatedOnDefaultValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,9 +246,6 @@ namespace To_Do.Migrations
                         .HasColumnType("datetime(6)")
                         .HasDefaultValueSql("NOW(6)");
 
-                    b.Property<int>("FolderId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("tinyint(1)");
 
@@ -257,8 +256,6 @@ namespace To_Do.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FolderId");
 
                     b.ToTable("TodoTasks");
                 });
@@ -310,15 +307,6 @@ namespace To_Do.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("To_Do.Models.ToDoTask", b =>
-                {
-                    b.HasOne("To_Do.Models.Folder", "Folder")
-                        .WithMany("tasks")
-                        .HasForeignKey("FolderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

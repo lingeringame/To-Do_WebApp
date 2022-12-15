@@ -13,7 +13,13 @@
         <span asp-validation-for="Body" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="IsImportant">Mark as Important?: <input type="checkbox" asp-for="IsImportant"/></label>
+        <label asp-for="IsImportant">Mark as important?: <input type="checkbox" asp-for="IsImportant"/></label>
+    </div>
+    <div class="form-group">
+        <label asp-for="FolderId">Add to folder</label>
+        <select asp-for="FolderId" asp-items="Model.AvailFolders">
+            <option disabled selected>Please select...</option>
+        </select>
     </div>
     <input type="submit" value="Add To-Do" />
 </form>

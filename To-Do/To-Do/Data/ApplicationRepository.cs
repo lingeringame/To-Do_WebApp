@@ -7,13 +7,17 @@ namespace To_Do.Data
 {
     public interface IApplicationRepository
     {
-        void AddNewToDo(ToDoTask todo);
         void SaveChanges();
-        IEnumerable<ToDoTask> GetTodos();
-        ToDoTask GetTodoById(int id);
+        void AddNewToDo(ToDoTask todo);
         void UpdateTask(ToDoTask todo);
-        IEnumerable<ToDoTask> GetTodosByUserId(int id);
         void DeleteTodo(int id);
+        ToDoTask GetTodoById(int id);
+        IEnumerable<ToDoTask> GetTodos();
+        IEnumerable<ToDoTask> GetTodosByFolderId(int id);
+        IEnumerable<ToDoTask> GetTodosByUserId(int id);
+        void AddFolder(Folder folder);
+        IEnumerable<Folder> GetFolders();
+        Folder GetFolderById(int id);
     }
     public class ApplicationRepository : IApplicationRepository
     {
@@ -60,6 +64,25 @@ namespace To_Do.Data
         public void UpdateTask(ToDoTask todo)
         {
             _context.TodoTasks.Update(todo);
+        }
+        public void AddFolder(Folder folder)
+        {
+            _context.Folders.Add(folder);
+        }
+        public IEnumerable<Folder> GetFolders()
+        {
+            return _context.Folders.ToList();
+        }
+
+        public Folder GetFolderById(int id)
+        {
+            return _context.Folders.FirstOrDefault(x => x.Id==id);
+        }
+
+        public IEnumerable<ToDoTask> GetTodosByFolderId(int id)
+        {
+            IEnumerable<ToDoTask> todos = _context.TodoTasks.Where(x => x.FolderId == id).ToList();
+            return todos;
         }
     }
 }

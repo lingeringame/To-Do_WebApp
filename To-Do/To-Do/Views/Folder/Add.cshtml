@@ -1,0 +1,11 @@
+﻿@using To_Do.ViewModels;
+@model AddFolderViewModel;
+
+<form method="post" asp-controller="Folder" asp-action="Add">
+    <div class="form-group">
+        <label asp-for="Name">Folder name: <input type="text" asp-for="Name" /></label>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <input type="submit" value="Add Folder" />
+</form>

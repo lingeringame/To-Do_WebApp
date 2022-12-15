@@ -10,6 +10,7 @@ namespace To_Do.Data
     public class ApplicationDbContext : IdentityDbContext
     {
         public DbSet<ToDoTask> TodoTasks { get; set; }
+        public DbSet<Folder> Folders { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
