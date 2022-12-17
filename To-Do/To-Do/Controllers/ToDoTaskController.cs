@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Components.RenderTree;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.RenderTree;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using To_Do.Authorization;
 using To_Do.Data;
 using To_Do.Models;
 using To_Do.ViewModels;
@@ -12,20 +17,26 @@ namespace To_Do.Controllers
     public class ToDoTaskController : Controller
     {
         private ApplicationRepository _repo;
-        public ToDoTaskController(ApplicationDbContext dbContext)
+        protected IAuthorizationService AuthorizationService { get; }
+        protected UserManager<IdentityUser> UserManager { get; }
+        public ToDoTaskController(ApplicationDbContext dbContext, IAuthorizationService authorizationService, UserManager<IdentityUser> userManager)
         {
             _repo = new ApplicationRepository(dbContext);
+            AuthorizationService = authorizationService;
+            UserManager = userManager;
         }
 
         //GET /<controller>/
-        public IActionResult Index(List<ToDoTask> searchSet = null)
+
+        public async Task<IActionResult> Index(List<ToDoTask> searchSet = null)
         {
             ViewBag.title = "Tasks";
             IComparer<ToDoTask> comparer = new ToDoTaskComparer();
             //we can't set default value to _repo.Getodos, so if its null, we set the default value
             if(!searchSet.Any())
             {
-                List<ToDoTask> todos = _repo.GetTodos().ToList();
+                var currentUserId = UserManager.GetUserId(User);
+                List<ToDoTask> todos = (List<ToDoTask>)await _repo.GetTodos(currentUserId);
                 todos.Sort(comparer);
                 return View(todos);
             }
@@ -46,7 +57,7 @@ namespace To_Do.Controllers
 
         //POST /<controller>/Add
         [HttpPost]
-        public IActionResult Add(AddToDoTaskViewModel viewModel)
+        public async Task<IActionResult> Add(AddToDoTaskViewModel viewModel)
         {
             Folder folder = _repo.GetFolderById(viewModel.FolderId);
             if(ModelState.IsValid)
@@ -56,30 +67,66 @@ namespace To_Do.Controllers
                     Title = viewModel.Title,
                     Body = viewModel.Body,
                     IsImportant = viewModel.IsImportant,
-                    Folder= folder
+                    Folder= folder,
+                    OwnerID = UserManager.GetUserId(User)
                 };
+                
+                var isAuthorized = await AuthorizationService.AuthorizeAsync(User, newTask, TodoTaskOperations.Create);
+                if(!isAuthorized.Succeeded)
+                {
+                    return Forbid();
+                }
                 _repo.AddNewToDo(newTask);
-                _repo.SaveChanges();
-                return Redirect("/todotask");
+                await _repo.SaveChanges();
+                return Redirect("/todotask/index");
             }
             return Redirect("/todotask/add");
         }
         //GET /<controller>/EditTask
-        public IActionResult EditTask(int id)
+        public async Task<IActionResult> EditTask(int id)
         {
-            ViewBag.taskToEdit = _repo.GetTodoById(id); 
+            ToDoTask task = _repo.GetTodoById(id);
+
+            if(task == null)
+            {
+                return NotFound();
+            }
+
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(User, task, TodoTaskOperations.Update);
+
+            if(!isAuthorized.Succeeded)
+            {
+                return Forbid();
+            }
+
+            ViewBag.taskToEdit = task;
             //I pass in ViewBag.taskToEdit.Body because the body text is stored in a textarea and due to ASP.NET rules, I have to instantiate the viewModel with the
             //Body description so that it properly shows, instead of just putting a temporary placeholder attribute. 
-            AddToDoTaskViewModel viewModel = new AddToDoTaskViewModel(ViewBag.taskToEdit.Body);
+            List<Folder> folders = _repo.GetFolders().ToList();
+            AddToDoTaskViewModel viewModel = new AddToDoTaskViewModel(ViewBag.taskToEdit.Body, folders);
             return View(viewModel);
         }
 
         //POST /<controller>/EditTask
         [HttpPost]
-        public IActionResult EditTask(AddToDoTaskViewModel viewModel)
+        public async Task<IActionResult> EditTask(AddToDoTaskViewModel viewModel)
         {
             if(ModelState.IsValid)
             {
+
+                ToDoTask editedTaskOnDB = _repo.GetTodoById(viewModel.Id);
+                if(editedTaskOnDB == null)
+                {
+                    return NotFound();
+                }
+
+                var isAuthorized = await AuthorizationService.AuthorizeAsync(User, editedTaskOnDB, TodoTaskOperations.Update);
+
+                if(!isAuthorized.Succeeded)
+                {
+                    return Forbid();
+                }
+
                 ToDoTask editedTask = new ToDoTask
                 {
                     Id = viewModel.Id,
@@ -88,44 +135,73 @@ namespace To_Do.Controllers
                     IsImportant = viewModel.IsImportant,
                     CreatedOn = _repo.GetTodoById(viewModel.Id).CreatedOn,
                     IsCompleted = viewModel.IsCompleted,
-                    Folder = _repo.GetFolderById(viewModel.FolderId)
+                    Folder = _repo.GetFolderById(viewModel.FolderId),
+                    OwnerID = editedTaskOnDB.OwnerID
                 };
+
                 _repo.UpdateTask(editedTask);
-                _repo.SaveChanges();
-                return Redirect("/todotask");
+                
+                await _repo.SaveChanges();
+                return Redirect("/todotask/index");
             }
             return Redirect("/todotask/edit/" + viewModel.Id);
         }
-        public IActionResult DeleteTask(int id)
+        public async Task<IActionResult> DeleteTask(int id)
         {
-            _repo.DeleteTodo(id);
-            _repo.SaveChanges();
-            return Redirect("/todotask");
+            ToDoTask todoToRemove = _repo.GetTodoById(id);
+            if(todoToRemove == null)
+            {
+                return NotFound();
+            }
+
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(User, todoToRemove, TodoTaskOperations.Delete);
+
+            if(!isAuthorized.Succeeded)
+            {
+                return Forbid();
+            }
+            _repo.DeleteTodo(todoToRemove);
+            await _repo.SaveChanges();
+            return Redirect("/todotask/index");
         }
         //GET /<controller>/BulkDelete
-        public IActionResult BulkDelete()
+        public async Task<IActionResult> BulkDelete()
         {
-            List<ToDoTask> tasks = _repo.GetTodos().ToList();
+            var currentUserId = UserManager.GetUserId(User);
+            List<ToDoTask> tasks = (List<ToDoTask>)await _repo.GetTodos(currentUserId);
             return View(tasks);
         }
 
         //POST /<controller>/BulkDelete
         [HttpPost]
-        public IActionResult BulkDelete(int[] idsToRemove) //ids is empty. Need to debug this. checked checkboxes won't append their value to the array. 
+        public async Task<IActionResult> BulkDelete(int[] idsToRemove) //ids is empty. Need to debug this. checked checkboxes won't append their value to the array. 
         {
             foreach(int id in idsToRemove)
             {
-                _repo.DeleteTodo(id);
+                ToDoTask todoToDelete = _repo.GetTodoById(id);
+                if (todoToDelete == null)
+                {
+                    return NotFound();
+                }
+
+                var isAuthorized = await AuthorizationService.AuthorizeAsync(User, todoToDelete, TodoTaskOperations.Delete);
+
+                if (!isAuthorized.Succeeded)
+                {
+                    return Forbid();
+                }
+                _repo.DeleteTodo(todoToDelete);
             }
-            _repo.SaveChanges();
-            return Redirect("/todotask");
+            await _repo.SaveChanges();
+            return Redirect("/todotask/index");
         }
 
         //GET /<controller>/Search
         [HttpPost]
-        public IActionResult Search(string userInput)
+        public async Task<IActionResult> Search(string userInput)
         {
-            List<ToDoTask> todos = _repo.GetTodos().ToList();
+            var currentUserId = UserManager.GetUserId(User);
+            List<ToDoTask> todos = (List<ToDoTask>)await _repo.GetTodos(currentUserId);
             List<ToDoTask> resultSet = new List<ToDoTask>();
             if(string.IsNullOrEmpty(userInput) || userInput.ToLower() == "all")
             {
@@ -134,7 +210,7 @@ namespace To_Do.Controllers
             {
                 foreach (ToDoTask todo in todos)
                 {
-                    if (todo.Title.Contains(userInput))
+                    if (todo.Title.ToLower().Contains(userInput))
                     {
                         resultSet.Add(todo);
                     }

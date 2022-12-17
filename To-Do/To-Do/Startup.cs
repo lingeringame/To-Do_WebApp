@@ -7,11 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using To_Do.Data;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using To_Do.Authorization;
 
 namespace To_Do
 {
@@ -31,9 +34,17 @@ namespace To_Do
                 options.UseMySql(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
+            services.AddScoped<IAuthorizationHandler, TodoTaskIsOwnerAuthorizationHandler>();
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
@@ -70,7 +81,7 @@ namespace To_Do
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=ToDoTask}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=SignUp}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

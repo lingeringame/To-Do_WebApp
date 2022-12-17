@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using System.Threading.Tasks;
 
 namespace To_Do.Controllers
 {
@@ -29,7 +30,7 @@ namespace To_Do.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(AddFolderViewModel viewModel)
+        public async Task<IActionResult> AddAsync(AddFolderViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -39,8 +40,8 @@ namespace To_Do.Controllers
                     CreatedOn = DateTime.Now
                 };
                 _repo.AddFolder(newFolder);
-                _repo.SaveChanges();
-                return Redirect("/folder");
+                await _repo.SaveChanges();
+                return Redirect("/folder/index");
             }
             return Redirect("/folder/add");
         }

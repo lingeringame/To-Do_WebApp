@@ -1,18 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using To_Do.Models;
 
 namespace To_Do.Data
 {
     public interface IApplicationRepository
     {
-        void SaveChanges();
+        Task SaveChanges();
         void AddNewToDo(ToDoTask todo);
         void UpdateTask(ToDoTask todo);
-        void DeleteTodo(int id);
+        void DeleteTodo(ToDoTask todo);
         ToDoTask GetTodoById(int id);
-        IEnumerable<ToDoTask> GetTodos();
+        Task<IEnumerable<ToDoTask>> GetTodos(string cuid);
         IEnumerable<ToDoTask> GetTodosByFolderId(int id);
         IEnumerable<ToDoTask> GetTodosByUserId(int id);
         void AddFolder(Folder folder);
@@ -34,14 +35,13 @@ namespace To_Do.Data
             _context.TodoTasks.Add(todo);
         }
 
-        public void SaveChanges()
+        public async Task SaveChanges()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-        public void DeleteTodo(int id)
+        public void DeleteTodo(ToDoTask todo)
         {
-            ToDoTask todoToRemove= _context.TodoTasks.FirstOrDefault(td => td.Id==id);
-            _context.TodoTasks.Remove(todoToRemove);
+            _context.TodoTasks.Remove(todo);
         }
         public ToDoTask GetTodoById(int id)
         {
@@ -51,9 +51,9 @@ namespace To_Do.Data
             //return _context.TodoTasks.Find(id);
         }
 
-        public IEnumerable<ToDoTask> GetTodos()
+        public async Task<IEnumerable<ToDoTask>> GetTodos(string cuid)
         {
-            return _context.TodoTasks.ToList();
+            return await _context.TodoTasks.Where(t => t.OwnerID == cuid).ToListAsync();
         }
 
         public IEnumerable<ToDoTask> GetTodosByUserId(int id)
@@ -63,7 +63,8 @@ namespace To_Do.Data
 
         public void UpdateTask(ToDoTask todo)
         {
-            _context.TodoTasks.Update(todo);
+            _context.Attach(todo).State= EntityState.Modified;
+            //_context.TodoTasks.Update(todo);
         }
         public void AddFolder(Folder folder)
         {

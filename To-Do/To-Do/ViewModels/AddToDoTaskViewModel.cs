@@ -28,6 +28,19 @@ namespace To_Do.ViewModels
         {
 
         }
+        public AddToDoTaskViewModel(string body, List<Folder> availFolders) : this(body)
+        {
+            AvailFolders = new List<SelectListItem>();
+            foreach (Folder folder in availFolders)
+            {
+                SelectListItem item = new SelectListItem
+                {
+                    Value = folder.Id.ToString(),
+                    Text = folder.Name
+                };
+                AvailFolders.Add(item);
+            }
+        }
         public AddToDoTaskViewModel(List<Folder> availFolders)
         {
             AvailFolders = new List<SelectListItem>();

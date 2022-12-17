@@ -1,0 +1,40 @@
+﻿body {
+    background-image: url("../images/todolistappbg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+.smallText {
+    margin: 0 auto;
+    margin-top: 10%;
+    text-shadow: -2px 5px 3px rgba(0, 0, 0, 0.16);
+    color: #de6aa5;
+    font-family: "Helvetica";
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center;
+}
+
+.bigText {
+    margin: 0 auto;
+    margin-top: 10%;
+    color: #de6aa5;
+    text-shadow: -2px 5px 3px rgba(0, 0, 0, 0.16);
+    font-family: "Helvetica";
+    font-weight: 400;
+    font-size: 26px;
+    text-align: center;
+    width: 50%;
+    height: 100px;
+}
+
+.todotext {
+    height: 100px;
+    text-shadow: -2px 5px 3px rgba(68, 68, 68, 0.16);
+    color: #606060;
+    font-family: "Helvetica";
+    font-weight: bold;
+    font-size: 48px;
+    text-align: left;
+}
