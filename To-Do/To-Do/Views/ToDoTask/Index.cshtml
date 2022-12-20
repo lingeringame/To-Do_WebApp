@@ -4,8 +4,13 @@
     <link href="~/css/ToDoTaskIndexStyles.css" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/36af15ca2b.js" crossorigin="anonymous"></script>
 </head>
-<div><a asp-controller="Folder" asp-action="Index">< Folders</a></div>
-<h1 class="indexPageTitle">@ViewBag.title</h1>
+<div><a style="color:#de6aa5;" asp-controller="Folder" asp-action="Index">< Folders</a></div>
+<h1 class="indexPageTitle">
+    Tasks
+    <a style="color:inherit;" asp-area="" asp-controller="ToDoTask" asp-action="Add">
+        <i class="fa-solid fa-circle-plus fa-2xs"></i>
+    </a>
+</h1>
 
 @if (Model.Count <= 0)
 {
@@ -27,18 +32,18 @@ else
                 @foreach (ToDoTask todo in Model)
                 {
                     <tr class="theTasks" data-row="row @todo.Id">
-                        <td><input type="checkbox" data-row="row @todo.Id" asp-for="@todo.IsCompleted" checked="@todo.IsCompleted"/></td>
+                        <td><input type="checkbox" class="roundCheckbox" data-row="row @todo.Id" asp-for="@todo.IsCompleted" checked="@todo.IsCompleted"/></td>
                         <td class="todoText @(@todo.IsCompleted ? "strikethrough" : "")" data-row="row @todo.Id"><p class="markedImportantSign">@(@todo.IsImportant == true ? "!" : "")</p></td>
                         <td class="todoText @(@todo.IsCompleted ? "strikethrough" : "")" data-row="row @todo.Id">
                             <p class="taskTitle">@todo.Title</p>
                             <p class="taskOrigin">@todo.CreatedOn</p>
                             </td>
-                        <td><a asp-controller="ToDoTask" asp-action="EditTask" asp-route-id="@todo.Id"><i class="fa-solid fa-pen-to-square"></i></a></td>
-                        <td><a asp-controller="ToDoTask" asp-action="DeleteTask" asp-route-id="@todo.Id"><i class="fa-solid fa-trash-can"></i></a></td>
+                        <td><a style="color:inherit;"asp-controller="ToDoTask" asp-action="EditTask" asp-route-id="@todo.Id"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                        <td><a style="color:inherit;" asp-controller="ToDoTask" asp-action="DeleteTask" asp-route-id="@todo.Id"><i class="fa-solid fa-trash-can"></i></a></td>
                     </tr>
                 }
             </table>
-    <a asp-controller="ToDoTask" asp-action="BulkDelete">Select To Delete</a>
+            <a style="color:red;" asp-controller="ToDoTask" asp-action="BulkDelete">Select To Delete</a>
         </div>
 
         <div style="width: 50%; float:right; margin-top: 3%;">

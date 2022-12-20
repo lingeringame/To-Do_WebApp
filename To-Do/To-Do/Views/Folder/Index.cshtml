@@ -1,19 +1,39 @@
 ﻿@using To_Do.Models;
 @model List<Folder>;
 
-<div><a asp-controller="ToDoTask" asp-action="Index">All ></a></div>
-<h1>@ViewBag.title</h1>
+    <head>
+        <link href="~/css/FolderIndexStyles.css" rel="stylesheet"/>
+        <script src="https://kit.fontawesome.com/36af15ca2b.js" crossorigin="anonymous"></script>
+    </head>
+
+<h1 class="indexPageTitle">
+    Folders 
+    <a style="color:inherit;" asp-area="" asp-controller="Folder" asp-action="Add">
+        <i class="fa-solid fa-circle-plus fa-2xs"></i>
+    </a>
+</h1>
 
 @if(Model.Count <= 0) {
     <span>No folders</span>
 } else {
     <table class="table">
+        <tr>
+            <td class="row">
+                <a style="color:#948dfd;" asp-controller="ToDoTask" asp-action="Index">
+                    <i class="fa-solid fa-folder fa-2xl"></i>&nbsp;All >
+                </a>
+            </td>
+        </tr>
         @foreach (Folder f in Model)
         {
             if(f.Name != "None")
             {
             <tr>
-                <td><a asp-controller="Folder" asp-action="Results" asp-route-id="@f.Id">@f.Name</a></td>
+                    <td class="row">
+                        <a style="color:#948dfd;" asp-controller="Folder" asp-action="Results" asp-route-id="@f.Id">
+                            <i class="fa-solid fa-folder fa-2xl"></i>&nbsp;@f.Name
+                        </a>
+                    </td>
             </tr>
             }
 

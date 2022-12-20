@@ -75,3 +75,20 @@ th {
 .todoTitleClicked {
     color: #948dfd;
 }
+
+.roundCheckbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 1px solid black;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+}
+.roundCheckbox:checked {
+    appearance: auto;
+    clip-path: circle(50% at 50% 50%);
+    background-color: blue;
+}

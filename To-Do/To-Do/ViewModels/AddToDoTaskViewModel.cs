@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using To_Do.Models;
 
 namespace To_Do.ViewModels
@@ -19,7 +20,7 @@ namespace To_Do.ViewModels
         public bool IsCompleted { get; set; }
         public DateTime CreatedOn { get; set; }
         public List<SelectListItem> AvailFolders { get; set; }
-        public int FolderId { get; set; }
+        public int? FolderId { get; set; }
         public AddToDoTaskViewModel(string body)
         {
             Body = body;

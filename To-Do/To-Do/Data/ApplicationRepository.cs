@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,8 +18,8 @@ namespace To_Do.Data
         IEnumerable<ToDoTask> GetTodosByFolderId(int id);
         IEnumerable<ToDoTask> GetTodosByUserId(int id);
         void AddFolder(Folder folder);
-        IEnumerable<Folder> GetFolders();
-        Folder GetFolderById(int id);
+        IEnumerable<Folder> GetFoldersByUserId(string uid);
+        Folder GetFolderById(int? id);
     }
     public class ApplicationRepository : IApplicationRepository
     {
@@ -70,12 +71,12 @@ namespace To_Do.Data
         {
             _context.Folders.Add(folder);
         }
-        public IEnumerable<Folder> GetFolders()
+        public IEnumerable<Folder> GetFoldersByUserId(string uid)
         {
-            return _context.Folders.ToList();
+            return _context.Folders.Where(f => f.OwnerID == uid).ToList();
         }
 
-        public Folder GetFolderById(int id)
+        public Folder GetFolderById(int? id)
         {
             return _context.Folders.FirstOrDefault(x => x.Id==id);
         }
@@ -85,5 +86,6 @@ namespace To_Do.Data
             IEnumerable<ToDoTask> todos = _context.TodoTasks.Where(x => x.FolderId == id).ToList();
             return todos;
         }
+
     }
 }

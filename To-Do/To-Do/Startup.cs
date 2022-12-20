@@ -45,6 +45,7 @@ namespace To_Do
                     .Build();
             });
             services.AddScoped<IAuthorizationHandler, TodoTaskIsOwnerAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, FolderIsOwnerAuthorizationHandler>();
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {

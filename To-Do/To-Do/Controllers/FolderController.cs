@@ -7,19 +7,27 @@ using System.Linq;
 using System;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using To_Do.Authorization;
 
 namespace To_Do.Controllers
 {
     public class FolderController : Controller
     {
         private ApplicationRepository _repo;
-        public FolderController(ApplicationDbContext dbContext)
+        protected IAuthorizationService AuthorizationService { get; }
+        protected UserManager<IdentityUser> UserManager { get; }
+        public FolderController(ApplicationDbContext dbContext, IAuthorizationService authorizationService, UserManager<IdentityUser> userManager)
         {
             _repo= new ApplicationRepository(dbContext);
+            AuthorizationService = authorizationService;
+            UserManager = userManager;
         }
         public IActionResult Index()
         {
-            List<Folder> folders = _repo.GetFolders().ToList();
+            var uid = UserManager.GetUserId(User);
+            List<Folder> folders = _repo.GetFoldersByUserId(uid).ToList();
             ViewBag.title = "Folders";
             return View(folders);
         }
@@ -30,15 +38,21 @@ namespace To_Do.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(AddFolderViewModel viewModel)
+        public async Task<IActionResult> Add(AddFolderViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
                 Folder newFolder = new Folder
                 {
                     Name = viewModel.Name,
-                    CreatedOn = DateTime.Now
+                    CreatedOn = DateTime.Now,
+                    OwnerID = UserManager.GetUserId(User)
                 };
+                var isAuthorized = await AuthorizationService.AuthorizeAsync(User, newFolder, TodoTaskOperations.Create);
+                if(!isAuthorized.Succeeded)
+                {
+                    return Forbid();
+                }
                 _repo.AddFolder(newFolder);
                 await _repo.SaveChanges();
                 return Redirect("/folder/index");
@@ -50,6 +64,7 @@ namespace To_Do.Controllers
         {
             if (ModelState.IsValid)
             {
+                //should i add user id as well for extra security? or is it redundant?
                 List<ToDoTask> folderTasks = _repo.GetTodosByFolderId(id).ToList();
                 return View("../ToDoTask/Index", folderTasks);
             }

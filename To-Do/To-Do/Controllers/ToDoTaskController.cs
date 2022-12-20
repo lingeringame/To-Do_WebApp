@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,7 @@ namespace To_Do.Controllers
         //GET /<controller>/Add
         public IActionResult Add()
         {
-            List<Folder> folders = _repo.GetFolders().ToList();
+            List<Folder> folders = _repo.GetFoldersByUserId(UserManager.GetUserId(User)).ToList();
             return View(new AddToDoTaskViewModel(folders));
         }
 
@@ -59,15 +60,21 @@ namespace To_Do.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddToDoTaskViewModel viewModel)
         {
+            if(viewModel.FolderId == 0)
+            {
+                viewModel.FolderId = null;
+            }
             Folder folder = _repo.GetFolderById(viewModel.FolderId);
-            if(ModelState.IsValid)
+            var folderIdVal = folder?.Id;
+
+            if (ModelState.IsValid)
             {
                 ToDoTask newTask = new ToDoTask
                 {
                     Title = viewModel.Title,
                     Body = viewModel.Body,
                     IsImportant = viewModel.IsImportant,
-                    Folder= folder,
+                    FolderId= folderIdVal, 
                     OwnerID = UserManager.GetUserId(User)
                 };
                 
@@ -102,7 +109,7 @@ namespace To_Do.Controllers
             ViewBag.taskToEdit = task;
             //I pass in ViewBag.taskToEdit.Body because the body text is stored in a textarea and due to ASP.NET rules, I have to instantiate the viewModel with the
             //Body description so that it properly shows, instead of just putting a temporary placeholder attribute. 
-            List<Folder> folders = _repo.GetFolders().ToList();
+            List<Folder> folders = _repo.GetFoldersByUserId(UserManager.GetUserId(User)).ToList();
             AddToDoTaskViewModel viewModel = new AddToDoTaskViewModel(ViewBag.taskToEdit.Body, folders);
             return View(viewModel);
         }
@@ -135,7 +142,7 @@ namespace To_Do.Controllers
                     IsImportant = viewModel.IsImportant,
                     CreatedOn = _repo.GetTodoById(viewModel.Id).CreatedOn,
                     IsCompleted = viewModel.IsCompleted,
-                    Folder = _repo.GetFolderById(viewModel.FolderId),
+                    FolderId = viewModel.FolderId,
                     OwnerID = editedTaskOnDB.OwnerID
                 };
 
@@ -219,4 +226,5 @@ namespace To_Do.Controllers
             return View("Index",resultSet);
         }
     }
+
 }

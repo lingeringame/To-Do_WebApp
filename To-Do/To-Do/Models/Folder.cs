@@ -6,6 +6,7 @@ namespace To_Do.Models
     public class Folder
     {
         public int Id { get; set; }
+        public string OwnerID { get; set; }
         public string Name { get; set; }
         public DateTime CreatedOn { get; set; }
         public List<ToDoTask> tasks { get; set; }   
