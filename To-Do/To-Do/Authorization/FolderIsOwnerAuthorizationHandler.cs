@@ -3,14 +3,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using To_Do.Models;
+using To_Do.Areas.Identity.Data;
 
 namespace To_Do.Authorization
 {
     public class FolderIsOwnerAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Folder>
     {
-        UserManager<IdentityUser> _userManager;
+        UserManager<To_DoUser> _userManager;
 
-        public FolderIsOwnerAuthorizationHandler(UserManager<IdentityUser> userManager)
+        public FolderIsOwnerAuthorizationHandler(UserManager<To_DoUser> userManager)
         {
             _userManager = userManager;
         }

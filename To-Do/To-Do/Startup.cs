@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using To_Do.Data;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using To_Do.Authorization;
+using To_Do.Areas.Identity.Data;
 
 namespace To_Do
 {
@@ -33,7 +34,7 @@ namespace To_Do
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<To_DoUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
