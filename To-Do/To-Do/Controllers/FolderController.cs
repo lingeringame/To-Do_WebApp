@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using To_Do.Authorization;
+using To_Do.Areas.Identity.Data;
 
 namespace To_Do.Controllers
 {
@@ -17,8 +18,8 @@ namespace To_Do.Controllers
     {
         private ApplicationRepository _repo;
         protected IAuthorizationService AuthorizationService { get; }
-        protected UserManager<IdentityUser> UserManager { get; }
-        public FolderController(ApplicationDbContext dbContext, IAuthorizationService authorizationService, UserManager<IdentityUser> userManager)
+        protected UserManager<To_DoUser> UserManager { get; }
+        public FolderController(ApplicationDbContext dbContext, IAuthorizationService authorizationService, UserManager<To_DoUser> userManager)
         {
             _repo= new ApplicationRepository(dbContext);
             AuthorizationService = authorizationService;

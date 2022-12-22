@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using To_Do.Areas.Identity.Data;
 using To_Do.Authorization;
 using To_Do.Data;
 using To_Do.Models;
@@ -19,8 +20,8 @@ namespace To_Do.Controllers
     {
         private ApplicationRepository _repo;
         protected IAuthorizationService AuthorizationService { get; }
-        protected UserManager<IdentityUser> UserManager { get; }
-        public ToDoTaskController(ApplicationDbContext dbContext, IAuthorizationService authorizationService, UserManager<IdentityUser> userManager)
+        protected UserManager<To_DoUser> UserManager { get; }
+        public ToDoTaskController(ApplicationDbContext dbContext, IAuthorizationService authorizationService, UserManager<To_DoUser> userManager)
         {
             _repo = new ApplicationRepository(dbContext);
             AuthorizationService = authorizationService;

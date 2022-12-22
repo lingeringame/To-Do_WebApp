@@ -19,6 +19,7 @@ namespace To_Do.Models
         public bool IsImportant { get; set; }
         public bool IsCompleted { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public Folder Folder { get; set; }
         public int? FolderId { get; set; }
 
         public ToDoTask()

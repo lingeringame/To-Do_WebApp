@@ -2,15 +2,16 @@
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using To_Do.Areas.Identity.Data;
 using To_Do.Models;
 
 namespace To_Do.Authorization
 {
     public class TodoTaskIsOwnerAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, ToDoTask>
     {
-        UserManager<IdentityUser> _userManager;
+        UserManager<To_DoUser> _userManager;
 
-        public TodoTaskIsOwnerAuthorizationHandler(UserManager<IdentityUser> userManager)
+        public TodoTaskIsOwnerAuthorizationHandler(UserManager<To_DoUser> userManager)
         {
             _userManager = userManager;
         }

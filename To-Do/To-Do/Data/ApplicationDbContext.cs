@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using To_Do.Areas.Identity.Data;
 using To_Do.Models;
 
 namespace To_Do.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<To_DoUser>
     {
         public DbSet<ToDoTask> TodoTasks { get; set; }
         public DbSet<Folder> Folders { get; set; }
