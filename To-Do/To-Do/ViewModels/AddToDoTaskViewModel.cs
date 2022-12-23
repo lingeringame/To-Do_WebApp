@@ -19,6 +19,7 @@ namespace To_Do.ViewModels
         public bool IsImportant { get; set; }
         public bool IsCompleted { get; set; }
         public DateTime CreatedOn { get; set; }
+        public DateTime LastEditedOn { get; set; }
         public List<SelectListItem> AvailFolders { get; set; }
         public int? FolderId { get; set; }
         public AddToDoTaskViewModel(string body)

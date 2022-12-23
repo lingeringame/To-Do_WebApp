@@ -10,6 +10,7 @@ th {
     background-color: rgb(240,240,240);
     border-radius: 1em;
     padding: 10px;
+    height: 550px;
 }
 
 .taskDescBody {

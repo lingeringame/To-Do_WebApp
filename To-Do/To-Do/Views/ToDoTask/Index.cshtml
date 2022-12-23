@@ -6,7 +6,7 @@
 </head>
 <div><a style="color:#de6aa5;" asp-controller="Folder" asp-action="Index">< Folders</a></div>
 <h1 class="indexPageTitle">
-    Tasks
+    @ViewBag.title
     <a style="color:inherit;" asp-area="" asp-controller="ToDoTask" asp-action="Add">
         <i class="fa-solid fa-circle-plus fa-2xs"></i>
     </a>
@@ -21,8 +21,8 @@ else
 {
     <div>
         <form method="post" asp-controller="ToDoTask" asp-action="Search">
-            <input style="border-style:none; border-bottom: 1px solid black;" type="text" id="userInput" name="userInput" placeholder="Search for..." />
-            <input type="submit" value="Search">
+            <input style="border-style:none; border-bottom: 1px solid gray;" type="text" id="userInput" name="userInput" placeholder="Search for..." />
+            <input type="submit" value="🔍︎">
         </form>
 
     </div>
@@ -37,9 +37,9 @@ else
                         <td class="todoText @(@todo.IsCompleted ? "strikethrough" : "")" data-row="row @todo.Id">
                             <p class="taskTitle">@todo.Title</p>
                             <p class="taskOrigin">@todo.CreatedOn</p>
-                            </td>
-                        <td><a style="color:inherit;"asp-controller="ToDoTask" asp-action="EditTask" asp-route-id="@todo.Id"><i class="fa-solid fa-pen-to-square"></i></a></td>
-                        <td><a style="color:inherit;" asp-controller="ToDoTask" asp-action="DeleteTask" asp-route-id="@todo.Id"><i class="fa-solid fa-trash-can"></i></a></td>
+                        </td>
+                        <td class="EditDeleteLinks"><a style="color:inherit;visibility:hidden;"asp-controller="ToDoTask" asp-action="EditTask" asp-route-id="@todo.Id"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                        <td class="EditDeleteLinks"><a style="color:inherit;visibility:hidden;" asp-controller="ToDoTask" asp-action="DeleteTask" asp-route-id="@todo.Id"><i class="fa-solid fa-trash-can"></i></a></td>
                     </tr>
                 }
             </table>
