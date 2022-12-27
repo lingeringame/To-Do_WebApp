@@ -19,7 +19,6 @@ th {
 .taskDescTitle {
     font-size: 1.7rem;
     font-weight: 600;
-    color: #948dfd;
     border-bottom: 1px lightgray solid;
 }
 
@@ -38,7 +37,16 @@ th {
 }
 
 .theTasks {
-    background-color: #e8eaf6;
+    color: rgb(100,100,100);
+    background-color: rgb(240,240,240);
+    border-top: solid 1px lightgray;
+}
+.EditDeleteLinks {
+    color: #cfa904;
+}
+
+.todoText, .EditDeleteLinks {
+    padding: 8px 0;
 }
 
 .taskTitle {
@@ -71,11 +79,12 @@ th {
 }
 
 .taskTitle:hover {
-    color: #948dfd;
+    color: black;
 }
 
 .todoTitleClicked {
-    color: #948dfd;
+    color: black;
+    font-weight: 600;
 }
 
 .roundCheckbox {

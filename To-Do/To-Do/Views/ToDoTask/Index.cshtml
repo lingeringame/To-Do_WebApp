@@ -47,7 +47,6 @@ else
                             </td>
                             <td class="todoText @(@todo.IsCompleted ? "strikethrough" : "")" data-row="row @todo.Id">
                                 <p class="taskTitle">@todo.Title</p>
-                                <p class="taskDateCreated">Created on @todo.CreatedOn.ToLongDateString() at @todo.CreatedOn.ToShortTimeString()</p>
                             </td>
 @*                            <td>
                                 <input type="hidden" name="Id" value="@todo.Id"/>
@@ -75,8 +74,15 @@ else
             {
                 <div class="taskDesc" style="display:none;" data-row="row @todo.Id">
                     <div class="taskDescTitle">
-                        @todo.Title 
-                        <p class="taskDescTitleImportant">@(todo.IsImportant ? "Important" : "")</p>
+                        @if(todo.IsCompleted == true)
+                        {
+                            <i class="fa-solid fa-circle-check"></i>
+                        }
+                        @todo.Title
+                        <p class="taskDescTitleImportant">
+                            @(todo.IsImportant ? "Marked important" : "")
+                        </p>
+                        <p class="taskDateCreated">Created on @todo.CreatedOn.ToLongDateString() at @todo.CreatedOn.ToShortTimeString()</p>
                         <p class="taskDateCreated">Last edited on @todo.LastEditedOn.ToLongDateString() at @todo.LastEditedOn.ToShortTimeString()</p>
                     </div>
                     <div class="taskDescBody">@todo.Body</div>
