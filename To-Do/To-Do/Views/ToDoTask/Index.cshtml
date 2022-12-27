@@ -39,7 +39,7 @@ else
                 {
                     <tr class="theTasks" data-row="row @todo.Id">
                         <td>
-                            <input type="checkbox" class="roundCheckbox" data-row="row @todo.Id" asp-for="@todo.IsCompleted" checked="@todo.IsCompleted"/>
+                            <input type="checkbox" class="roundCheckbox" data-row="row @todo.Id"/>
                         </td>
                         <td class="todoText @(@todo.IsCompleted ? "strikethrough" : "")" data-row="row @todo.Id">
                             <p class="markedImportantSign">@(@todo.IsImportant == true ? "!" : "")</p>
