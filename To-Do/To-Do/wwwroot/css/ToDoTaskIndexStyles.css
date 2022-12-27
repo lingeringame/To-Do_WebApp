@@ -19,26 +19,34 @@ th {
 .taskDescTitle {
     font-size: 1.7rem;
     font-weight: 600;
-    color: #948dfd;
     border-bottom: 1px lightgray solid;
 }
 
 .taskDescTitleImportant {
     padding-left: 2%;
     display: inline;
-    color: #ee6e57;
+    color: red;
     font-size: 0.85rem;
     font-weight: bold;
 }
 
 
 .indexPageTitle {
-    color: #de6aa5 !important;
+    color: rgb(60,60,60) !important;
     font-weight: 600 !important;
 }
 
 .theTasks {
-    background-color: #e8eaf6;
+    color: rgb(100,100,100);
+    background-color: rgb(240,240,240);
+    border-top: solid 1px lightgray;
+}
+.EditDeleteLinks {
+    color: #cfa904;
+}
+
+.todoText, .EditDeleteLinks {
+    padding: 8px 0;
 }
 
 .taskTitle {
@@ -46,9 +54,9 @@ th {
     cursor: pointer;
 }
 
-.taskOrigin {
-    color: gray;
-    font-size: .9rem;
+.taskDateCreated {
+    color: rgb(170,170,170);
+    font-size: .7rem;
     font-weight: 600;
 }
 
@@ -59,23 +67,24 @@ th {
 
 .markedImportantSign {
     display: inline;
-    color: #ee6e57;
+    color: red;
     font-weight: 900;
     font-size: 1.4rem;
 }
 
 .strikethrough {
-    background-color: #d1d2de;
+    /*background-color: #d1d2de;*/
     text-decoration: line-through;
     color: gray;
 }
 
 .taskTitle:hover {
-    color: #948dfd;
+    color: black;
 }
 
 .todoTitleClicked {
-    color: #948dfd;
+    color: black;
+    font-weight: 600;
 }
 
 .roundCheckbox {

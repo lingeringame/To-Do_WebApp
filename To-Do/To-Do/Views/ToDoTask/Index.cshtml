@@ -4,11 +4,17 @@
     <link href="~/css/ToDoTaskIndexStyles.css" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/36af15ca2b.js" crossorigin="anonymous"></script>
 </head>
-<div><a style="color:#de6aa5;" asp-controller="Folder" asp-action="Index">< Folders</a></div>
+
+<div>
+    <a style="color:rgb(100,100,100);" asp-controller="Folder" asp-action="Index">
+        < Folders
+    </a>
+</div>
+
 <h1 class="indexPageTitle">
     @ViewBag.title
     <a style="color:inherit;" asp-area="" asp-controller="ToDoTask" asp-action="Add">
-        <i class="fa-solid fa-circle-plus fa-2xs"></i>
+        <i class="fa-solid fa-square-plus"></i>
     </a>
 </h1>
 
@@ -21,28 +27,45 @@ else
 {
     <div>
         <form method="post" asp-controller="ToDoTask" asp-action="Search">
-            <input style="border-style:none; border-bottom: 1px solid gray;" type="text" id="userInput" name="userInput" placeholder="Search for..." />
+            <input style="border-style:none; border-bottom: 1px solid gray;" type="text" id="userInput" name="userInput" placeholder="Search..." />
             <input type="submit" value="🔍︎">
         </form>
 
     </div>
     <div>
         <div style="width:50%; float:left">
-            <table style="width:75%; margin-top: 5%;">
-                @foreach (ToDoTask todo in Model)
-                {
-                    <tr class="theTasks" data-row="row @todo.Id">
-                        <td><input type="checkbox" class="roundCheckbox" data-row="row @todo.Id" asp-for="@todo.IsCompleted" checked="@todo.IsCompleted"/></td>
-                        <td class="todoText @(@todo.IsCompleted ? "strikethrough" : "")" data-row="row @todo.Id"><p class="markedImportantSign">@(@todo.IsImportant == true ? "!" : "")</p></td>
-                        <td class="todoText @(@todo.IsCompleted ? "strikethrough" : "")" data-row="row @todo.Id">
-                            <p class="taskTitle">@todo.Title</p>
-                            <p class="taskOrigin">@todo.CreatedOn</p>
-                        </td>
-                        <td class="EditDeleteLinks"><a style="color:inherit;visibility:hidden;"asp-controller="ToDoTask" asp-action="EditTask" asp-route-id="@todo.Id"><i class="fa-solid fa-pen-to-square"></i></a></td>
-                        <td class="EditDeleteLinks"><a style="color:inherit;visibility:hidden;" asp-controller="ToDoTask" asp-action="DeleteTask" asp-route-id="@todo.Id"><i class="fa-solid fa-trash-can"></i></a></td>
-                    </tr>
-                }
-            </table>
+@*            <form method="post" asp-action="EditComplete" asp-controller="ToDoTask">
+*@                <table style="width:75%; margin-top: 5%;">
+                    @foreach (ToDoTask todo in Model)
+                    {
+                        <tr class="theTasks" data-row="row @todo.Id">
+@*                            <td>
+                                <input type="checkbox" class="roundCheckbox" data-row="row @todo.Id" name="IsCompleted" value="true" onchange="this.form.submit()" @(todo.IsCompleted ? "checked" : "")/>
+                            </td>*@
+                            <td class="todoText @(@todo.IsCompleted ? "strikethrough" : "")" data-row="row @todo.Id">
+                                <p class="markedImportantSign">@(@todo.IsImportant == true ? "!" : "")</p>
+                            </td>
+                            <td class="todoText @(@todo.IsCompleted ? "strikethrough" : "")" data-row="row @todo.Id">
+                                <p class="taskTitle">@todo.Title</p>
+                            </td>
+@*                            <td>
+                                <input type="hidden" name="Id" value="@todo.Id"/>
+                            </td>*@
+                            <td class="EditDeleteLinks">
+                                <a style="color:inherit;visibility:hidden;" asp-controller="ToDoTask" asp-action="EditTask" asp-route-id="@todo.Id">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                            </td>
+                            <td class="EditDeleteLinks">
+                                <a style="color:inherit;visibility:hidden;" asp-controller="ToDoTask" asp-action="DeleteTask" asp-route-id="@todo.Id">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+@*            </form>
+*@
             <a style="color:red;" asp-controller="ToDoTask" asp-action="BulkDelete">Select To Delete</a>
         </div>
 
@@ -51,11 +74,16 @@ else
             {
                 <div class="taskDesc" style="display:none;" data-row="row @todo.Id">
                     <div class="taskDescTitle">
-                        @todo.Title 
+                        @if(todo.IsCompleted == true)
+                        {
+                            <i class="fa-solid fa-circle-check"></i>
+                        }
+                        @todo.Title
                         <p class="taskDescTitleImportant">
-                            @(todo.IsImportant ? "Important" : "")
+                            @(todo.IsImportant ? "Marked important" : "")
                         </p>
-                        <p style="font-size:.5rem;">@todo.LastEditedOn</p>
+                        <p class="taskDateCreated">Created on @todo.CreatedOn.ToLongDateString() at @todo.CreatedOn.ToShortTimeString()</p>
+                        <p class="taskDateCreated">Last edited on @todo.LastEditedOn.ToLongDateString() at @todo.LastEditedOn.ToShortTimeString()</p>
                     </div>
                     <div class="taskDescBody">@todo.Body</div>
                 </div>
