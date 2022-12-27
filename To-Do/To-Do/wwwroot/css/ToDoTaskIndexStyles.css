@@ -10,6 +10,7 @@ th {
     background-color: rgb(240,240,240);
     border-radius: 1em;
     padding: 10px;
+    height: 550px;
 }
 
 .taskDescBody {
@@ -29,6 +30,7 @@ th {
     font-size: 0.85rem;
     font-weight: bold;
 }
+
 
 .indexPageTitle {
     color: #de6aa5 !important;

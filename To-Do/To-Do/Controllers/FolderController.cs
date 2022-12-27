@@ -67,6 +67,7 @@ namespace To_Do.Controllers
             {
                 //should i add user id as well for extra security? or is it redundant?
                 List<ToDoTask> folderTasks = _repo.GetTodosByFolderId(id).ToList();
+                ViewBag.title = _repo.GetFolderById(id).Name;
                 return View("../ToDoTask/Index", folderTasks);
             }
             return View();
