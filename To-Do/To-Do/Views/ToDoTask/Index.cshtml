@@ -6,7 +6,7 @@
 </head>
 
 <div>
-    <a style="color:#de6aa5;" asp-controller="Folder" asp-action="Index">
+    <a style="color:rgb(100,100,100);" asp-controller="Folder" asp-action="Index">
         < Folders
     </a>
 </div>
@@ -14,7 +14,7 @@
 <h1 class="indexPageTitle">
     @ViewBag.title
     <a style="color:inherit;" asp-area="" asp-controller="ToDoTask" asp-action="Add">
-        <i class="fa-solid fa-circle-plus fa-2xs"></i>
+        <i class="fa-solid fa-square-plus"></i>
     </a>
 </h1>
 
@@ -27,7 +27,7 @@ else
 {
     <div>
         <form method="post" asp-controller="ToDoTask" asp-action="Search">
-            <input style="border-style:none; border-bottom: 1px solid gray;" type="text" id="userInput" name="userInput" placeholder="Search for..." />
+            <input style="border-style:none; border-bottom: 1px solid gray;" type="text" id="userInput" name="userInput" placeholder="Search..." />
             <input type="submit" value="🔍︎">
         </form>
 
