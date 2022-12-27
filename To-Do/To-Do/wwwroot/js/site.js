@@ -36,7 +36,7 @@ Array.from(availableTasks).forEach(task => task.addEventListener("mouseover", fu
     let links = Array.from(taskChildNodes).filter((node) => node.className === "EditDeleteLinks")
     console.log(links)
     for (link of links) {
-        link.childNodes[0].style.visibility = "visible"; 
+        link.childNodes[1].style.visibility = "visible"; 
     }
 }))
 
@@ -44,6 +44,6 @@ Array.from(availableTasks).forEach(task => task.addEventListener("mouseout", fun
     let taskChildNodes = task.childNodes;
     let links = Array.from(taskChildNodes).filter((node) => node.className === "EditDeleteLinks")
     for (link of links) {
-        link.childNodes[0].style.visibility = "hidden";
+        link.childNodes[1].style.visibility = "hidden";
     }
 }))

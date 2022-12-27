@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.RenderTree;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -225,6 +226,22 @@ namespace To_Do.Controllers
                 }
             }
             return View("Index",resultSet);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditComplete([Bind("Id,IsCompleted")]ToDoTask task)
+        {
+            int taskId = task.Id;
+            bool isCompleted = task.IsCompleted;
+            ToDoTask theTask = _repo.GetTodoById(taskId);
+            if(theTask == null)
+            {
+                return NotFound();
+            }
+            theTask.IsCompleted = isCompleted;
+            _repo.UpdateTask(theTask);
+            await _repo.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 
