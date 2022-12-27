@@ -50,7 +50,13 @@ else
             @foreach(ToDoTask todo in Model)
             {
                 <div class="taskDesc" style="display:none;" data-row="row @todo.Id">
-                    <div class="taskDescTitle">@todo.Title <p class="taskDescTitleImportant">@(todo.IsImportant ? "Important" : "")</p></div>
+                    <div class="taskDescTitle">
+                        @todo.Title 
+                        <p class="taskDescTitleImportant">
+                            @(todo.IsImportant ? "Important" : "")
+                        </p>
+                        <p style="font-size:.5rem;">@todo.LastEditedOn</p>
+                    </div>
                     <div class="taskDescBody">@todo.Body</div>
                 </div>
             }
