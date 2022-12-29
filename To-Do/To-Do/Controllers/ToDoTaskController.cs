@@ -53,22 +53,34 @@ namespace To_Do.Controllers
         }
 
         //GET /<controller>/Add
-        public IActionResult Add()
+        public IActionResult Add(int? folderId = null)
         {
+            ViewBag.folderId = folderId;
             List<Folder> folders = _repo.GetFoldersByUserId(UserManager.GetUserId(User)).ToList();
             return View(new AddToDoTaskViewModel(folders));
         }
 
         //POST /<controller>/Add
         [HttpPost]
-        public async Task<IActionResult> Add(AddToDoTaskViewModel viewModel)
+        public async Task<IActionResult> Add(AddToDoTaskViewModel viewModel, int? folderId = null)
         {
             if(viewModel.FolderId == 0)
             {
                 viewModel.FolderId = null;
             }
-            Folder folder = _repo.GetFolderById(viewModel.FolderId);
-            var folderIdVal = folder?.Id;
+            Folder folder;
+            int folderIdVal = 0;
+            if(folderId != null)
+            {
+                //User created task while in a folder, use that folder by default
+                folder = _repo.GetFolderById(folderId);  
+                folderIdVal = folder.Id;
+            } else
+            {
+                //Use folder user chose.
+                folder = _repo.GetFolderById(viewModel.FolderId);
+                folderIdVal = folder.Id;
+            }
 
             if (ModelState.IsValid)
             {
