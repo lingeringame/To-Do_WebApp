@@ -16,7 +16,7 @@ namespace To_Do.Data
         ToDoTask GetTodoById(int id);
         Task<IEnumerable<ToDoTask>> GetTodos(string cuid);
         IEnumerable<ToDoTask> GetTodosByFolderId(int id);
-        IEnumerable<ToDoTask> GetTodosByUserId(int id);
+        Task<IEnumerable<ToDoTask>> GetTodosByUserId(string uid);
         void AddFolder(Folder folder);
         IEnumerable<Folder> GetFoldersByUserId(string uid);
         Folder GetFolderById(int? id);
@@ -57,9 +57,9 @@ namespace To_Do.Data
             return await _context.TodoTasks.Where(t => t.OwnerID == cuid).ToListAsync();
         }
 
-        public IEnumerable<ToDoTask> GetTodosByUserId(int id)
+        public async Task<IEnumerable<ToDoTask>> GetTodosByUserId(string uid)
         {
-            throw new System.NotImplementedException();
+            return await _context.TodoTasks.Where(task => task.OwnerID == uid).ToListAsync();
         }
 
         public void UpdateTask(ToDoTask todo)

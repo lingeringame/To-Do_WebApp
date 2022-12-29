@@ -25,12 +25,18 @@ namespace To_Do.Controllers
             AuthorizationService = authorizationService;
             UserManager = userManager;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var uid = UserManager.GetUserId(User);
             List<Folder> folders = _repo.GetFoldersByUserId(uid).ToList();
+            Dictionary<Folder,int> FolderCountPairs = new Dictionary<Folder,int>();
+            ViewBag.TotalTasks = ((List<ToDoTask>)await _repo.GetTodosByUserId(uid)).Count();
+            foreach(Folder folder in folders)
+            {
+                FolderCountPairs.Add(folder, _repo.GetTodosByFolderId(folder.Id).ToList().Count());
+            }
             ViewBag.title = "Folders";
-            return View(folders);
+            return View(FolderCountPairs);
         }
         //GET /<controller>/Add
         public IActionResult Add()
@@ -67,7 +73,7 @@ namespace To_Do.Controllers
             {
                 //should i add user id as well for extra security? or is it redundant?
                 List<ToDoTask> folderTasks = _repo.GetTodosByFolderId(id).ToList();
-                ViewBag.title = _repo.GetFolderById(id).Name;
+                ViewBag.title = _repo.GetFolderById(id).Name + " (" + folderTasks.Count() + ")";
                 return View("../ToDoTask/Index", folderTasks);
             }
             return View();
