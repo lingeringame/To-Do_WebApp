@@ -67,6 +67,7 @@ namespace To_Do.Controllers
             return Redirect("/folder/add");
         }
         //GET /<controller>/Results
+        [HttpGet]
         public IActionResult Results(int id)
         {
             if (ModelState.IsValid)

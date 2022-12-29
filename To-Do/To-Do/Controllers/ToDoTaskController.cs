@@ -69,7 +69,7 @@ namespace To_Do.Controllers
                 viewModel.FolderId = null;
             }
             Folder folder;
-            int folderIdVal = 0;
+            int folderIdVal;
             if(folderId != null)
             {
                 //User created task while in a folder, use that folder by default
@@ -100,7 +100,8 @@ namespace To_Do.Controllers
                 }
                 _repo.AddNewToDo(newTask);
                 await _repo.SaveChanges();
-                return Redirect("/todotask/index");
+                return RedirectToAction("Results", "Folder", new {id = folderIdVal});
+                //return Redirect("/todotask/index");
             }
             return Redirect("/todotask/add");
         }
