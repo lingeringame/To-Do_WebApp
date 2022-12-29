@@ -1,5 +1,5 @@
 ﻿@using To_Do.Models;
-@model List<Folder>;
+@model Dictionary<Folder,int>
 
     <head>
         <link href="~/css/FolderIndexStyles.css" rel="stylesheet"/>
@@ -20,23 +20,19 @@
         <tr>
             <td class="row">
                 <a style="color:#948dfd;" asp-controller="ToDoTask" asp-action="Index">
-                    <i class="fa-solid fa-folder fa-2xl"></i>&nbsp;All >
+                    <i class="fa-solid fa-folder fa-2xl"></i>&nbsp;All (@ViewBag.TotalTasks)
                 </a>
             </td>
         </tr>
-        @foreach (Folder f in Model)
+        @foreach (KeyValuePair<Folder,int> kvp in Model)
         {
-            if(f.Name != "None")
-            {
             <tr>
-                    <td class="row">
-                        <a style="color:#948dfd;" asp-controller="Folder" asp-action="Results" asp-route-id="@f.Id">
-                            <i class="fa-solid fa-folder fa-2xl"></i>&nbsp;@f.Name
-                        </a>
-                    </td>
+                <td class="row">
+                    <a style="color:#948dfd;" asp-controller="Folder" asp-action="Results" asp-route-id="@kvp.Key.Id">
+                        <i class="fa-solid fa-folder fa-2xl"></i>&nbsp;@kvp.Key.Name (@kvp.Value)
+                    </a>
+                </td>
             </tr>
-            }
-
         }
     </table>
 }

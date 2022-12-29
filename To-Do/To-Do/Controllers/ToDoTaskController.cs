@@ -41,6 +41,7 @@ namespace To_Do.Controllers
                 var currentUserId = UserManager.GetUserId(User);
                 List<ToDoTask> todos = (List<ToDoTask>)await _repo.GetTodos(currentUserId);
                 todos.Sort(comparer);
+                ViewBag.title = "All tasks " + "(" + todos.Count() + ")";
                 return View(todos);
             }
             else
