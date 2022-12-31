@@ -64,21 +64,16 @@ namespace To_Do.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddToDoTaskViewModel viewModel, int? folderId = null)
         {
-            if(viewModel.FolderId == 0)
-            {
-                viewModel.FolderId = null;
-            }
+            //if(viewModel.FolderId == 0)
+            //{
+            //    viewModel.FolderId = null;
+            //}
             Folder folder;
-            int folderIdVal;
+            int? folderIdVal = null;
             if(folderId != null)
             {
                 //User created task while in a folder, use that folder by default
                 folder = _repo.GetFolderById(folderId);  
-                folderIdVal = folder.Id;
-            } else
-            {
-                //Use folder user chose.
-                folder = _repo.GetFolderById(viewModel.FolderId);
                 folderIdVal = folder.Id;
             }
 

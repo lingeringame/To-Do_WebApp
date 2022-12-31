@@ -73,10 +73,17 @@ namespace To_Do.Controllers
             if (ModelState.IsValid)
             {
                 //should i add user id as well for extra security? or is it redundant?
-                List<ToDoTask> folderTasks = _repo.GetTodosByFolderId(id).ToList();
-                ViewBag.folderId = id;
-                ViewBag.title = _repo.GetFolderById(id).Name + " (" + folderTasks.Count() + ")";
-                return View("../ToDoTask/Index", folderTasks);
+                List<ToDoTask> folderTasks = null;
+                if(id != 0)
+                {
+                    folderTasks = _repo.GetTodosByFolderId(id).ToList();
+                    ViewBag.folderId = id;
+                    ViewBag.title = _repo.GetFolderById(id).Name + " (" + folderTasks.Count() + ")";
+                    return View("../ToDoTask/Index", folderTasks);
+                } else
+                {
+                    return RedirectToAction("Index", "ToDoTask");
+                }
             }
             return View();
         }
