@@ -96,7 +96,6 @@ namespace To_Do.Controllers
                 _repo.AddNewToDo(newTask);
                 await _repo.SaveChanges();
                 return RedirectToAction("Results", "Folder", new {id = folderIdVal});
-                //return Redirect("/todotask/index");
             }
             return Redirect("/todotask/add");
         }
