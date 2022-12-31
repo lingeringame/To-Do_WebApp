@@ -52,7 +52,7 @@ else
                                 <input type="hidden" name="Id" value="@todo.Id"/>
                             </td>*@
                             <td class="EditDeleteLinks">
-                                <a style="color:inherit;visibility:hidden;" asp-controller="ToDoTask" asp-action="EditTask" asp-route-id="@todo.Id">
+                                <a style="color:inherit;visibility:hidden;" asp-controller="ToDoTask" asp-action="EditTask" asp-route-id="@todo.Id" asp-route-folderId="@ViewBag.folderId">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
                             </td>
