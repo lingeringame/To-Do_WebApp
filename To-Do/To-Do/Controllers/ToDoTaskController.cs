@@ -182,16 +182,26 @@ namespace To_Do.Controllers
             return RedirectToAction("Results", "Folder", new {id = folderId});
         }
         //GET /<controller>/BulkDelete
-        public async Task<IActionResult> BulkDelete()
+        public async Task<IActionResult> BulkDelete(int? folderId = null)
         {
-            var currentUserId = UserManager.GetUserId(User);
-            List<ToDoTask> tasks = (List<ToDoTask>)await _repo.GetTodos(currentUserId);
+            var currentUserId = string.Empty;
+            List<ToDoTask> tasks;
+            if(folderId == null)
+            {
+                currentUserId = UserManager.GetUserId(User);
+                tasks = (List<ToDoTask>)await _repo.GetTodos(currentUserId);
+            } else
+            {
+                int folderIdNotNull = (int)folderId;
+                tasks = _repo.GetTodosByFolderId(folderIdNotNull).ToList();
+            }
+            ViewBag.folderId_bd = folderId;
             return View(tasks);
         }
 
         //POST /<controller>/BulkDelete
         [HttpPost]
-        public async Task<IActionResult> BulkDelete(int[] idsToRemove) //ids is empty. Need to debug this. checked checkboxes won't append their value to the array. 
+        public async Task<IActionResult> BulkDelete(int[] idsToRemove, int? folderId_bd = null) //ids is empty. Need to debug this. checked checkboxes won't append their value to the array. 
         {
             foreach(int id in idsToRemove)
             {
@@ -210,7 +220,7 @@ namespace To_Do.Controllers
                 _repo.DeleteTodo(todoToDelete);
             }
             await _repo.SaveChanges();
-            return Redirect("/todotask/index");
+            return RedirectToAction("Results", "Folder", new {id = folderId_bd});
         }
 
         //GET /<controller>/Search
