@@ -47,3 +47,14 @@ Array.from(availableTasks).forEach(task => task.addEventListener("mouseout", fun
         link.childNodes[1].style.visibility = "hidden";
     }
 }))
+
+//selects/deselects all checkboxes in BulkDelete View
+document.querySelector("#selectBtn").addEventListener("click", function () {
+    let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = true);
+});
+
+document.querySelector("#deselectBtn").addEventListener("click", function () {
+    let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = false);
+})
