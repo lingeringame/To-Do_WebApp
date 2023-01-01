@@ -7,7 +7,7 @@
 <p style="display:none;">
     @Model.Id = @ViewBag.taskToEdit.Id;
 </p>
-<form method="post" asp-controller="ToDoTask" asp-action="EditTask">
+<form method="post" asp-controller="ToDoTask" asp-action="EditTask" asp-route-folderId_e="@ViewBag.folderId_e">
     <div class="form-group">
         <label asp-for="Title">Title: <input type="text" asp-for="Title" value="@ViewBag.taskToEdit.Title"/></label>
         <span asp-validation-for="Title" class="text-danger"></span>

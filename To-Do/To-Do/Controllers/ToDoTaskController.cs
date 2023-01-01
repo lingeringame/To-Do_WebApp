@@ -64,10 +64,6 @@ namespace To_Do.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddToDoTaskViewModel viewModel, int? folderId = null)
         {
-            //if(viewModel.FolderId == 0)
-            //{
-            //    viewModel.FolderId = null;
-            //}
             Folder folder;
             int? folderIdVal = null;
             if(folderId != null)
@@ -100,10 +96,14 @@ namespace To_Do.Controllers
             return Redirect("/todotask/add");
         }
         //GET /<controller>/EditTask
-        public async Task<IActionResult> EditTask(int id)
+        public async Task<IActionResult> EditTask(int id, int? folderId = null)
         {
             ToDoTask task = _repo.GetTodoById(id);
-
+            ViewBag.folderId_e = null;
+            if(folderId != null)
+            {
+                ViewBag.folderId_e = task.FolderId;
+            }
             if(task == null)
             {
                 return NotFound();
@@ -126,7 +126,7 @@ namespace To_Do.Controllers
 
         //POST /<controller>/EditTask
         [HttpPost]
-        public async Task<IActionResult> EditTask(AddToDoTaskViewModel viewModel)
+        public async Task<IActionResult> EditTask(AddToDoTaskViewModel viewModel, int? folderId_e = null)
         {
             if(ModelState.IsValid)
             {
@@ -159,7 +159,7 @@ namespace To_Do.Controllers
                 _repo.UpdateTask(editedTask);
                 
                 await _repo.SaveChanges();
-                return Redirect("/todotask/index");
+                return RedirectToAction("Results","Folder", new {id = folderId_e});
             }
             return Redirect("/todotask/edit/" + viewModel.Id);
         }
