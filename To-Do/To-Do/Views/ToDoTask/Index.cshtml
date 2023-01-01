@@ -57,7 +57,7 @@ else
                                 </a>
                             </td>
                             <td class="EditDeleteLinks">
-                                <a style="color:inherit;visibility:hidden;" asp-controller="ToDoTask" asp-action="DeleteTask" asp-route-id="@todo.Id">
+                                <a style="color:inherit;visibility:hidden;" asp-controller="ToDoTask" asp-action="DeleteTask" asp-route-id="@todo.Id" asp-route-folderId="@ViewBag.folderId">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </a>
                             </td>
