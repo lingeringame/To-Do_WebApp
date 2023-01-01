@@ -163,7 +163,7 @@ namespace To_Do.Controllers
             }
             return Redirect("/todotask/edit/" + viewModel.Id);
         }
-        public async Task<IActionResult> DeleteTask(int id)
+        public async Task<IActionResult> DeleteTask(int id, int? folderId = null)
         {
             ToDoTask todoToRemove = _repo.GetTodoById(id);
             if(todoToRemove == null)
@@ -179,7 +179,7 @@ namespace To_Do.Controllers
             }
             _repo.DeleteTodo(todoToRemove);
             await _repo.SaveChanges();
-            return Redirect("/todotask/index");
+            return RedirectToAction("Results", "Folder", new {id = folderId});
         }
         //GET /<controller>/BulkDelete
         public async Task<IActionResult> BulkDelete()
