@@ -1,6 +1,10 @@
 ﻿@using To_Do.Models;
 @model List<ToDoTask>
 
+<head>
+    <script src="~/js/site.js"></script>
+</head>
+
 <a asp-controller="ToDoTask" asp-action="Index">< Back</a>
 <form method="post" asp-controller="ToDoTask" asp-action="BulkDelete" asp-route-ids="idsToRemove" asp-route-folderId_bd="@ViewBag.folderId_bd">
         @foreach(var task in Model)
@@ -12,5 +16,10 @@
                 </label>
             </div>
         }
+        <input id="selectBtn" class="btn btn-outline-primary" type="button" value="Select All"/>
+        <input id="deselectBtn" class="btn btn-outline-secondary" type="button" value="Deselect All"/>
+
     <input type="submit" value="Delete Selected" class="btn btn-danger"/>
 </form>
+
+
