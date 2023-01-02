@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using To_Do.Authorization;
 using To_Do.Areas.Identity.Data;
+using Newtonsoft.Json;
 
 namespace To_Do.Controllers
 {
@@ -83,6 +84,28 @@ namespace To_Do.Controllers
                 } else
                 {
                     return RedirectToAction("Index", "ToDoTask");
+                }
+            }
+            return View();
+        }
+
+        //Overriden method for the search function since we need both a folder Id to return to a folder and the result search set.
+        [HttpGet]
+        public IActionResult SearchResults(string serializedResults, int id)
+        {
+            List<ToDoTask> results = JsonConvert.DeserializeObject<List<ToDoTask>>(serializedResults);
+            if (ModelState.IsValid)
+            {
+                //should i add user id as well for extra security? or is it redundant?
+                if (id != 0)
+                {
+                    ViewBag.folderId = id;
+                    ViewBag.title = _repo.GetFolderById(id).Name + " search results: (" + results.Count() + ")"; //change this to "Results for USERINPUT (X)"?
+                    return View("../ToDoTask/Index", results);
+                }
+                else
+                {
+                    return RedirectToAction("SearchIndex", "ToDoTask", new {serializedSearchSet = JsonConvert.SerializeObject(results.ToList()) });
                 }
             }
             return View();

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,29 @@ namespace To_Do.Controllers
                 ViewBag.userInput = "default";
                 searchSet.Sort(comparer);
                 return View(searchSet);
+            }
+        }
+        //For 1/2/2023. When the search query does not return any tasks in "All tasks", everything is returned instead of showing "Nothing here yet!". Needs fix
+        public async Task<IActionResult> SearchIndex(string serializedSearchSet)
+        {
+            List<ToDoTask> searchSet = JsonConvert.DeserializeObject<List<ToDoTask>>(serializedSearchSet);
+            //ViewBag.title = "Tasks";
+            IComparer<ToDoTask> comparer = new ToDoTaskComparer();
+            //we can't set default value to _repo.Getodos, so if its null, we set the default value
+            if (!searchSet.Any())
+            {
+                var currentUserId = UserManager.GetUserId(User);
+                List<ToDoTask> todos = (List<ToDoTask>)await _repo.GetTodos(currentUserId);
+                todos.Sort(comparer);
+                ViewBag.title = "All tasks search results: (" + todos.Count() + ")";
+                return View("Index",todos);
+            }
+            else
+            {
+                ViewBag.title = "All tasks search results: (" + searchSet.Count() + ")";
+                ViewBag.userInput = "default";
+                searchSet.Sort(comparer);
+                return View("Index",searchSet);
             }
         }
 
@@ -225,10 +249,18 @@ namespace To_Do.Controllers
 
         //GET /<controller>/Search
         [HttpPost]
-        public async Task<IActionResult> Search(string userInput)
+        public async Task<IActionResult> Search(string userInput, int? folderId = null)
         {
-            var currentUserId = UserManager.GetUserId(User);
-            List<ToDoTask> todos = (List<ToDoTask>)await _repo.GetTodos(currentUserId);
+            List<ToDoTask> todos = new List<ToDoTask>();
+            if(folderId == null)
+            {
+                var currentUserId = UserManager.GetUserId(User);
+                todos = (List<ToDoTask>)await _repo.GetTodos(currentUserId);
+            } else
+            {
+                todos = _repo.GetTodosByFolderId((int)folderId).ToList();
+            }
+
             List<ToDoTask> resultSet = new List<ToDoTask>();
             if(string.IsNullOrEmpty(userInput) || userInput.ToLower() == "all")
             {
@@ -237,13 +269,13 @@ namespace To_Do.Controllers
             {
                 foreach (ToDoTask todo in todos)
                 {
-                    if (todo.Title.ToLower().Contains(userInput))
+                    if (todo.Title.ToLower().Contains(userInput) || todo.Body.ToLower().Contains(userInput))
                     {
                         resultSet.Add(todo);
                     }
                 }
             }
-            return View("Index",resultSet);
+            return RedirectToAction("SearchResults", "Folder", new { serializedResults = JsonConvert.SerializeObject(resultSet.ToList()), id = folderId});
         }
 
         [HttpPost]
