@@ -27,7 +27,6 @@ namespace To_Do.Models
         {
         }
 
-
         public override bool Equals(object obj)
         {
             return obj is ToDoTask @do &&

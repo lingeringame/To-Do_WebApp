@@ -26,7 +26,7 @@
 else
 {
     <div>
-        <form method="post" asp-controller="ToDoTask" asp-action="Search">
+        <form method="post" asp-controller="ToDoTask" asp-action="Search" asp-route-folderId="@ViewBag.folderId">
             <input style="border-style:none; border-bottom: 1px solid gray;" type="text" id="userInput" name="userInput" placeholder="Search..." />
             <input type="submit" value="🔍︎">
         </form>
